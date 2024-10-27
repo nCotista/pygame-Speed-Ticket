@@ -20,16 +20,16 @@ background = background.convert()
 background.fill((233, 62, 255)) # set bg color 
 
 
-bgimg = pygame.image.load("img/testimg.jpg") #load img
-bgimgpos = bgimg.get_rect() 
-bgimgpos.center = background.get_rect().center
+# bgimg = pygame.image.load("pygame\img\testimg.jpg") #load img
+# bgimgpos = bgimg.get_rect() 
+# bgimgpos.center = background.get_rect().center
 
 #set font
 font = pygame.font.Font(None, 36)
 text = font.render("Hello There", 1, (10, 10, 10))
 
 #textposition 
-textpos = text.get_rect() # เป็นกล่องอันนึง
+textpos = text.get_rect() 
 textpos.centerx = background.get_rect().centerx 
 
 # background.blit(text, textpos)  #blit = ขึ้นจอ
@@ -74,13 +74,7 @@ while running:
     else:
         pygame.draw.rect(screen, BUTTON_COLOR, start_button)
 
-        
-    
 
-    # fill the screen with a color to wipe away anything from last frame
-    # screen.blit(background, (0, 0)) #(name, postion)
-    # screen.blit(bgimg, bgimgpos)
-    # screen.blit(text, textpos)
     draw_text('Start Game', font, WHITE, screen, screen_width // 2, screen_height // 2 + 25)
     pygame.display.update()
 

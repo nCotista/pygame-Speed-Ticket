@@ -15,6 +15,8 @@ def add_obstacle():
 
 # Function to draw the road with perspective
 def draw_perspective_road():
+    SCREEN_WIDTH = pygame.display.Info().current_w 
+    SCREEN_HEIGHT =  pygame.display.Info().current_h 
     # Bottom part of the road (close to player)
     road_bottom_width = SCREEN_WIDTH * 0.8  # 80% of the screen width
     road_top_width = SCREEN_WIDTH * 0.2     # 20% of the screen width (far distance)
@@ -30,6 +32,8 @@ def draw_perspective_road():
 
 # Function to calculate lane X position based on Y (depth effect)
 def get_lane_x_position(lane, y):
+    SCREEN_WIDTH = pygame.display.Info().current_w 
+    SCREEN_HEIGHT =  pygame.display.Info().current_h 
     road_bottom_width = SCREEN_WIDTH * 0.8
     road_top_width = SCREEN_WIDTH * 0.2
 
@@ -41,3 +45,9 @@ def get_lane_x_position(lane, y):
     elif lane == 1:  # Right lane
         return SCREEN_WIDTH // 2 + road_width_at_y // 4  
 
+
+def draw_text(text, font, color, surface, x, y):
+    textobj = font.render(text, 1, color)
+    textrect = textobj.get_rect()
+    textrect.topleft = (x, y)
+    surface.blit(textobj, textrect)
