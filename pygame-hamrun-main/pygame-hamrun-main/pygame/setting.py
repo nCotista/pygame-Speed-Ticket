@@ -24,3 +24,8 @@ obstacles_on_screen = []
 # Obstacle settings
 obstacle_width, obstacle_height = 50, 50
 obstacle_speed = 5
+
+# Barrier settings
+barrier_lowLimit = 100
+barrier_highLimit = 500
+barrier_addConstant = 500

@@ -23,6 +23,7 @@ class Player:
             self.lane -= 1
         if keys[pygame.K_RIGHT] and self.lane < 1:
             self.lane += 1
+        # TODO: Add a delay to the movement
 
         self.x = get_lane_x_position(self.lane, player_y) - self.width // 2
         player_scale = 1 + (self.y / SCREEN_HEIGHT)  # Scale the player based on Y position

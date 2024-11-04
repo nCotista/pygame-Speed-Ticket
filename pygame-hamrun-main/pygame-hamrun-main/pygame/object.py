@@ -10,10 +10,15 @@ import pygame
 class Obstacle:
     def __init__(self, lane):
         self.lane = lane
+
+        # Basic + Co-ordinate Setting
         self.size = random.randint(30,50)
         self.y = -self.size
         self.x = get_lane_x_position(self.lane, self.y)
         self.rect = pygame.Rect(self.x, self.y, self.size, self.size)
+        self.color = (225, 0, 0)
+
+        # Speed Addition/Subtraction + text Setting
         self.speedChanger = random.randint(-250, 400)
         self.font = pygame.font.Font(None, 72)
         self.text = self.font.render(str(self.speedChanger), True, (255, 255, 255))
@@ -26,18 +31,36 @@ class Obstacle:
             scaled_height = int(obstacle_height * scale)
             self.x = get_lane_x_position(self.lane, self.y)
             self.rect = pygame.Rect(self.x, self.y, scaled_width, scaled_height)
-            pygame.draw.rect(screen, (255, 0, 0), self.rect)
-            self.text_rect = self.text.get_rect(center=(self.x +25, self.y -50))
+
+            pygame.draw.rect(screen, self.color, self.rect) # Draw Rect
+            # Draw Text on Rect
+            self.text_rect = self.text.get_rect(center=(self.x +25, self.y -50 ))
             screen.blit(self.text, self.text_rect)
 
     def get_rect(self):
         return self.rect
 
+# TODO: Create a "Multiplication-Increase/Decrease" Obstacle
+
+class Barrier(Obstacle):
+    def __init__(self, lane):
+        super().__init__(lane)
+
+        self.color = (0, 0, 255)
+        self.speedLimit = random.randint(barrier_lowLimit, barrier_highLimit)
+        self.text = self.font.render(str(self.speedLimit), True, (255, 255, 255))
+        self.text_rect = self.text.get_rect(center=(self.x + 25, self.y - 50))
+
+
+# Function Section
 
 def create_obstacle():
     obstacles.append(Obstacle(0))
     obstacles.append(Obstacle(1))
 
+def create_barrier():
+    obstacles.append(Barrier(0))
+    obstacles.append(Barrier(1))
 
 # Jay's Legacy
 def add_obstacle():
