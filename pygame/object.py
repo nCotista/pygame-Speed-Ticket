@@ -1,6 +1,7 @@
 import random
 from setting import *
 import pygame
+import pygwidgets
 
 # Function to add obstacles by random
 def add_obstacle():
@@ -51,3 +52,5 @@ def draw_text(text, font, color, surface, x, y):
     textrect = textobj.get_rect()
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
+
+newGameButton = pygwidgets.TextButton(window, (20, 230),'New Game', width=100, height=45)

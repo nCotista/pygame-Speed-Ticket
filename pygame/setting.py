@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 pygame.init()
+
 # Screen dimensions
 SCREEN_WIDTH, SCREEN_HEIGHT = 800, 600
 monitor_size = [pygame.display.Info().current_w, pygame.display.Info().current_h]
@@ -9,6 +10,9 @@ mainClock = pygame.time.Clock()
 fullscreen = False
 
 font = pygame.font.SysFont(None, 20)
+
+
+window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 #Colors
 WHITE = (255, 255, 255)

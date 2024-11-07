@@ -19,6 +19,7 @@ def main_menu():
  
         screen.fill((0,0,0))
         draw_text('main menu', font, (255, 255, 255), screen, 20, 20)
+        newGameButton.draw()
  
         mx, my = pygame.mouse.get_pos()
  
