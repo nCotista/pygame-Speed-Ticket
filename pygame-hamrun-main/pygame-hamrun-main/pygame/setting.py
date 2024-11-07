@@ -16,14 +16,18 @@ player_y = SCREEN_HEIGHT - 120  # Fixed Y position for the player (close to bott
 player_width, player_height = 50, 100
 player_lane = 0  # 0 = left 1 right
 lanes = [0, 1]  # Lane IDs (left, right)
+player_speed_ratio = 50 # ratio between player.speed value and player actual speed in game
 
 # Obstacles
 obstacles: list[Any] = []
-obstacles_on_screen = []
 
 # Obstacle settings
 obstacle_width, obstacle_height = 50, 50
 obstacle_speed = 5
+obstacle_low_value, obstacle_high_value = -500, 500 # # Set the highest-lowest addition number for Obstacle
+obstacle_low_multiplier, obstacle_high_multiplier = 2, 5 # Set the highest-lowest Multiplication number for MuDi_Obstacle
+MuDi_spawn_rate = 20 # chance of a MuDi_obstacle to spawn (%)
+
 
 # Barrier settings
 barrier_lowLimit = 100

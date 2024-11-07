@@ -19,7 +19,7 @@ class Obstacle:
         self.color = (225, 0, 0)
 
         # Speed Addition/Subtraction + text Setting
-        self.speedChanger = random.randint(-250, 400)
+        self.speedChanger = random.randint(obstacle_low_value, obstacle_high_value)
         self.font = pygame.font.Font(None, 72)
         self.text = self.font.render(str(self.speedChanger), True, (255, 255, 255))
         self.text_rect = self.text.get_rect(center=(self.x + 25, self.y -50))
@@ -40,38 +40,39 @@ class Obstacle:
     def get_rect(self):
         return self.rect
 
-# TODO: Create a "Multiplication-Increase/Decrease" Obstacle
-
-class Barrier(Obstacle):
+class MuDi_Obstacle(Obstacle):
     def __init__(self, lane):
         super().__init__(lane)
 
+        self.operator = random.choice(['X', '%'])
+        self.muDiNum = random.randint(obstacle_low_multiplier, obstacle_high_multiplier)
+        self.speedChanger = self.muDiNum if self.operator == 'X' else 1/self.muDiNum
+        self.text = self.font.render(str(f'{self.operator} {self.muDiNum}'), True, (255, 255, 255))
+
+    def get_total(self, player_speed):
+        return int(player_speed * self.speedChanger)
+
+class Barrier(Obstacle):
+    def __init__(self, lane, low, high):
+        super().__init__(lane)
+
         self.color = (0, 0, 255)
-        self.speedLimit = random.randint(barrier_lowLimit, barrier_highLimit)
+        self.speedLimit = random.randint(low, high)
         self.text = self.font.render(str(self.speedLimit), True, (255, 255, 255))
-        self.text_rect = self.text.get_rect(center=(self.x + 25, self.y - 50))
 
 
 # Function Section
 
 def create_obstacle():
-    obstacles.append(Obstacle(0))
-    obstacles.append(Obstacle(1))
+    for i in range(0, 2):
+        if random.randint(0, 100) < MuDi_spawn_rate: # 20% to spawn a Multiplication Obstacle(MuDi_Obstacle)
+            obstacles.append(MuDi_Obstacle(i))
+        else:
+            obstacles.append(Obstacle(i))
 
-def create_barrier():
-    obstacles.append(Barrier(0))
-    obstacles.append(Barrier(1))
-
-# Jay's Legacy
-def add_obstacle():
-    lane = random.choice([0, 1])
-    size = random.randint(30, 50)
-    new_obstacle = {
-        "lane": lane,
-        "y": -size,  # - เพื่อให้มันมาจากสุดจอ
-        "size": size
-    }
-    obstacles.append(new_obstacle)
+def create_barrier(low, high):
+    obstacles.append(Barrier(0, low, high))
+    obstacles.append(Barrier(1, low, high))
 
 # Function to draw the road with perspective
 def draw_perspective_road():
@@ -97,7 +98,19 @@ def get_lane_x_position(lane, y):
     road_width_at_y = road_top_width + (road_bottom_width - road_top_width) * (y / SCREEN_HEIGHT) #come from chat gpt
 
     if lane == 0:  # Left lane
-        return SCREEN_WIDTH // 2 - road_width_at_y // 4  
+        return SCREEN_WIDTH // 2 - road_width_at_y // 4
     elif lane == 1:  # Right lane
-        return SCREEN_WIDTH // 2 + road_width_at_y // 4  
+        return SCREEN_WIDTH // 2 + road_width_at_y // 4
+
+
+# Jay's Legacy
+def add_obstacle():
+    lane = random.choice([0, 1])
+    size = random.randint(30, 50)
+    new_obstacle = {
+        "lane": lane,
+        "y": -size,  # - เพื่อให้มันมาจากสุดจอ
+        "size": size
+    }
+    obstacles.append(new_obstacle)
 

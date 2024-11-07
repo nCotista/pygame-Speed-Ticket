@@ -14,6 +14,7 @@ player = Player()
 # Main game loop
 running = True
 obsCount = 0
+low_limit, high_limit = barrier_lowLimit, barrier_highLimit
 
 while running:
     screen.fill(WHITE)
@@ -26,27 +27,27 @@ while running:
     # Draw the road with perspective
     draw_perspective_road()
 
-    player.Player_controller() # Ping: รวมคำสั่ง ขยับ player กับ วาด player เอาไว้ใน class Player ที่ object.py
+    player.Player_controller()
 
     # Add obstacles
     if len(obstacles) < 2:
         if obsCount > 5:
-            create_barrier()
-            barrier_highLimit += barrier_addConstant
-            barrier_lowLimit += barrier_addConstant
+            create_barrier(low_limit, high_limit)
+            high_limit += barrier_addConstant
+            low_limit += barrier_addConstant
             obsCount = 0
         else:
             create_obstacle()
             obsCount += 1
 
-    # Ping: สร้าง obstacle ขึ้นมาเป็น class แล้วให้ขยับ
     for obs in obstacles:
         obs.obstacle_move()
-        # TODO: Clean Up -> update detection
-        if obs.get_rect().colliderect(player): # Ping: check ว่า obstacle ชน player มั้ย
+        if obs.get_rect().colliderect(player):
             if type(obs) == Obstacle:
                 player.acceleration(obs.speedChanger)
-                print(f'{obs.speedChanger} , {player.speed}')
+                #print(f'{obs.speedChanger} , {player.speed}')
+            elif type(obs) == MuDi_Obstacle:
+                player.speed = obs.get_total(player.speed)
             elif type(obs) == Barrier:
                 if player.speed < obs.speedLimit:
                     print('Game Over')
@@ -58,13 +59,13 @@ while running:
             continue
         if obs.y > SCREEN_HEIGHT:
             obstacles.remove(obs)
-    # TODO: Speed Up the car
 
     # Update the display
     pygame.display.update()
 
     # Frame rate
-    pygame.time.Clock().tick(60)
+    fr = 60 + player.speed/player_speed_ratio
+    pygame.time.Clock().tick(fr)
 
 # Quit Pygame
 pygame.quit()
