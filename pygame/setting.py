@@ -11,8 +11,9 @@ fullscreen = False
 
 font = pygame.font.SysFont(None, 20)
 
-
-window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+button_x = 0  # Center the button horizontally  เพราะ มันจะถูกแก้ที่ ฟังชั่น อัพเดทตลอดเวลาเลยไม่ต้องสนตำแหน่องเริ่มต้น
+button_y = 0  # Center the button vertically
+# window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 #Colors
 WHITE = (255, 255, 255)

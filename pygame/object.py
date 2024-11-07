@@ -1,7 +1,35 @@
 import random
 from setting import *
 import pygame
-import pygwidgets
+from creater import *
+
+background = pygame.image.load('pygame/img/Pixellance.png')
+
+start_button = CustomButton(screen, 0.3, 0.5, 'pygame/img/startb.png') #note the same value !!!!!!!!11
+
+meun_button = CustomButton(screen, 0.7, 0.5, 'pygame/img/menu.png') 
+
+musicSound = pygwidgets.BackgroundSound('pygame/sound/bgm.mp3')
+
+uibg = pygame.image.load('pygame/img/uibg.jpg')
+
+
+
+myDisplayText = pygwidgets.DisplayText(screen, (100, 200),textColor=(255, 255, 255))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Function to add obstacles by random
 def add_obstacle():
@@ -53,4 +81,19 @@ def draw_text(text, font, color, surface, x, y):
     textrect.topleft = (x, y)
     surface.blit(textobj, textrect)
 
-newGameButton = pygwidgets.TextButton(window, (20, 230),'New Game', width=100, height=45)
+# newGameButton = pygwidgets.TextButton(screen, (20, 230),'New Game', width=100, height=45)
+
+
+# startButton = pygwidgets.CustomButton(screen, (button_x, button_y),
+#            'pygame/img/startb.png',
+#             down='pygame/img/startb.png',
+#             over='pygame/img/startb.png',
+#             disabled='pygame/img/startb.png')
+
+# def update_button_position():
+#     screen_width = pygame.display.Info().current_w 
+#     screen_height = pygame.display.Info().current_h 
+#     button_x = screen_width // 2 - x
+#     button_y = screen_height // 2 - y
+#     startButton.setLoc((button_x, button_y))
+

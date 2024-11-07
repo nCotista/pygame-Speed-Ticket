@@ -10,6 +10,12 @@ def options():
         screen.fill((0,0,0))
  
         draw_text('options', font, (255, 255, 255), screen, 20, 20)
+        scaled_uibg = pygame.transform.scale(uibg, (screen.get_width(), screen.get_height()))
+        screen.blit(scaled_uibg, (0, 0))  # Draw the scaled background
+        myDisplayText.setValue('Here is some new text to display')
+        myDisplayText.draw()
+       
+        
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
