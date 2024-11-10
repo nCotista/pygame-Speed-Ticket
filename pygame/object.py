@@ -2,24 +2,30 @@ import random
 from setting import *
 import pygame
 from creater import *
+# from pygame_widgets.slider import Slider
+# from pygame_widgets.textbox import TextBox
 
+
+#picture
 background = pygame.image.load('pygame/img/Pixellance.png')
-
-start_button = CustomButton(screen, 0.3, 0.5, 'pygame/img/startb.png') #note the same value !!!!!!!!11
-
-meun_button = CustomButton(screen, 0.7, 0.5, 'pygame/img/menu.png') 
-
-musicSound = pygwidgets.BackgroundSound('pygame/sound/bgm.mp3')
-
 uibg = pygame.image.load('pygame/img/uibg.jpg')
 
+#button from creater
+start_button = CustomButton(screen, 200, -150, 'pygame/img/startb.png') #note the same value !!!!!!!!11
+meun_button = CustomButton(screen, 0, -150, 'pygame/img/menu.png') 
 
-
+#pygwidgets object
+musicSound = pygwidgets.BackgroundSound('pygame/sound/bgm.mp3')
 myDisplayText = pygwidgets.DisplayText(screen, (100, 200),textColor=(255, 255, 255))
 
+# test = random.randint(1, 800)
+#pygame_widgets
+#slider = Slider(Surface x, y, w, h, )
+# slider = Slider(screen, test, 100, 800, 40, min=0, max=99, step=1)
+# output = TextBox(screen, 475, 200, 50, 50, fontSize=30)
 
 
-
+slider = Slider(pos=(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2), size=(300, 20), initial_val=0.5, min=0, max=100)
 
 
 

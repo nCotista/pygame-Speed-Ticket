@@ -36,3 +36,5 @@ obstacles = []
 # Obstacle settings
 obstacle_width, obstacle_height = 50, 50
 obstacle_speed = 5
+
+
