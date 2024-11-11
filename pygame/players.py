@@ -45,7 +45,7 @@ class Player:
         self.text = self.font.render(str(self.speed), True, (255, 255, 255))
         self.text_rect = self.text.get_rect(center=(self.x + 25, self.y - 50))
 
-        pygame.draw.rect(screen, (0, 128, 255), self.rect)
+        
         screen.blit(self.text, self.text_rect)
 
     def get_rect(self):
