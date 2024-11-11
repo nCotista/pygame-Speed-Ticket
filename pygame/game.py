@@ -17,6 +17,8 @@ def game():
         global fullscreen
         running = True
         global obsCount
+        global low_limit
+        global high_limit
         # Main game loop
         roadx = pygame.image.load('pygame/img/road.png').convert()
         road =  pygame.transform.scale(roadx,(SCREEN_WIDTH,SCREEN_HEIGHT))

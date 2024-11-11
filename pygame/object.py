@@ -89,7 +89,7 @@ class Barrier(Obstacle):
         super().__init__(lane)
 
         # Load barrier image
-        self.image = pygame.image.load('pygame\img\car.png').convert_alpha()
+        self.image = pygame.image.load('pygame/img/car.png').convert_alpha()
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         
         # Barrier-specific speed limit
