@@ -27,7 +27,7 @@ def main_menu():
     while True:
 
         screen.fill((0,0,0))
-        draw_text('main menu', font, (255, 255, 255), screen, 20, 20)
+        # draw_text('main menu', font, (255, 255, 255), screen, 20, 20)
         scaled_background = pygame.transform.scale(background, (screen.get_width(), screen.get_height()))
         screen.blit(scaled_background, (0, 0))  # Draw the scaled background
         

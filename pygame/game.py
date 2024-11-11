@@ -1,68 +1,113 @@
 import pygame
-import random
 import sys
 from setting import *
 from object import *
-from pygame.locals import *
+from pygame.locals import * 
+from players import *
 
+pygame.init()
+player = Player()
+
+obsCount = 0
+low_limit, high_limit = barrier_lowLimit, barrier_highLimit
 
 # Main game loop
 def game():
-    global player_lane
-    running = True
-    while running:
-        screen.fill((0,0,0))
+        global screen
+        global fullscreen
+        running = True
+        global obsCount
+        # Main game loop
+        roadx = pygame.image.load('pygame/img/road.png').convert()
+        road =  pygame.transform.scale(roadx,(SCREEN_WIDTH,SCREEN_HEIGHT))
+
+        clock = pygame.time.Clock()
+
+        car_x=0
+
+
+        while running:
+            screen.fill(WHITE)
+            screen.fill(WHITE)
+    
+    # Calculate delta time for smooth movement
+            delta = clock.tick() / 1000 + 0.00001
+            road_speed =1000
+            road_speed += player.speed*2 # ใช้ความเร็วของผู้เล่นเป็นตัวกำหนดความเร็วของถนน
+    
+            car_x += delta * road_speed  # เคลื่อนที่ถนนตามความเร็วของผู้เล่
+
+            # Event handling
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == VIDEORESIZE:
+                    if not fullscreen:
+                        screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+                    
+                if event.type == KEYDOWN:
+                    if event.key == K_ESCAPE:
+                        pygame.quit()
+                        sys.exit()
+                    if event.key == K_f:
+                        fullscreen = not fullscreen
+                        if fullscreen:
+                            screen = pygame.display.set_mode(monitor_size, pygame.FULLSCREEN)
+                        else:
+                            screen = pygame.display.set_mode((screen.get_width(), screen.get_height()), pygame.RESIZABLE)
+
+            screen.fill((100, 150, 250))
+    
+            for i in range(800):
+                scale = (800- i) /800
+                x = car_x + i/scale
+                road_slice = road.subsurface((0, x % 320,800, 1))  # Change to 800 width
+                scaled_slice = pygame.transform.scale(road_slice, (800 * scale, 1))  # Scale to fit width of screen
         
-        draw_text('game', font, (255, 255, 255), screen, 20, 20)
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
-                    running = False
+    
+                screen.blit(scaled_slice, (400 - 400 * scale, 600 - i))  # Center the road on the screen
+
+
+            player.Player_controller()
+
+            # Add obstacles
+            if len(obstacles) < 2:
+                if obsCount > 5:
+                    create_barrier(low_limit, high_limit)
+                    high_limit += barrier_addConstant
+                    low_limit += barrier_addConstant
+                    obsCount = 0
+                else:
+                    create_obstacle()
+                    obsCount += 1
+
+            for obs in obstacles:
+                obs.obstacle_move()
+                if obs.get_rect().colliderect(player):
+                    if type(obs) == Obstacle:
+                        player.acceleration(obs.speedChanger)
+                        #print(f'{obs.speedChanger} , {player.speed}')
+                    elif type(obs) == MuDi_Obstacle:
+                        player.speed = obs.get_total(player.speed)
+                    elif type(obs) == Barrier:
+                        if player.speed < obs.speedLimit:
+                            print('Game Over')
+                            running = False
+                        else:
+                            player.acceleration(-1*obs.speedLimit)
+
+                    obstacles.remove(obs)
+                    continue
+                if obs.y > SCREEN_HEIGHT:
+                    obstacles.remove(obs)
+
+            # Update the display
+            pygame.display.update()
+
+            # Frame rate
+            fr = 60 + player.speed/player_speed_ratio
+            pygame.time.Clock().tick(fr)
+
+        # Quit Pygame
         
-        # Draw the road with perspective
-        draw_perspective_road()
-
-        # Player controls (move between lanes)
-        
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT] and player_lane > 0:
-            player_lane -= 1
-        if keys[pygame.K_RIGHT] and player_lane < 1:  
-            player_lane += 1
-
-        # Draw player ต้องเขียนในนี้ เพราะต้อวรับค่า player lanes ที่เปลี่ยนตลอด มั้ง ลองเขียนแยกตอนแรกขยับไม่ได้
-        SCREEN_HEIGHT =  pygame.display.Info().current_h 
-        player_y  = SCREEN_HEIGHT - 120 #ต้องลบเพราะนับมุมเป็น  0,0 จากบนซ้าย
-        player_x = get_lane_x_position(player_lane, player_y) - player_width // 2
-        player_scale = 1 + (player_y / SCREEN_HEIGHT)  # Scale the player based on Y position
-        scaled_player_width = int(player_width * player_scale)
-        scaled_player_height = int(player_height * player_scale)
-
-        pygame.draw.rect(screen, (0, 128, 255), (player_x, player_y, scaled_player_width, scaled_player_height))
-
-        # Add obstacles
-        if random.randint(0, 100) < 2:  # 2% chance per frame to generate obstacle สุ่ม 0 - 100 เอาเฉพาะที่น้อยกว่า 2 เลยเป็น 2%
-            add_obstacle() #in object.py
-
-        # Update obstacles and draw them
-        for obstacle in obstacles[:]:
-            obstacle["y"] += obstacle_speed #position
-
-            # Scale the obstacle based on its y-position (depth effect)
-            scale = 1 + (obstacle["y"] / SCREEN_HEIGHT)
-            scaled_width = int(obstacle_width * scale) #obstacle_width in setting.py
-            scaled_height = int(obstacle_height * scale)
-            obstacle_x = get_lane_x_position(obstacle["lane"], obstacle["y"]) - scaled_width // 2
-
-            # Draw obstacle
-            pygame.draw.rect(screen, (255, 0, 0), (obstacle_x, obstacle["y"], scaled_width, scaled_height))
-
-            # Remove obstacles that go off the screen
-            if obstacle["y"] > SCREEN_HEIGHT:
-                obstacles.remove(obstacle)
-
-        pygame.display.update()
-        mainClock.tick(60)
