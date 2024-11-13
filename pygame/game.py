@@ -50,8 +50,7 @@ def game():
                     
                 if event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
-                        pygame.quit()
-                        sys.exit()
+                        running = False
                     if event.key == K_f:
                         fullscreen = not fullscreen
                         if fullscreen:
