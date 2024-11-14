@@ -115,6 +115,8 @@ def create_barrier(low, high):
 # Function to draw the road with perspective
 def draw_perspective_road():
     # Bottom part of the road (close to player)
+    SCREEN_WIDTH = pygame.display.Info().current_w 
+    SCREEN_HEIGHT =  pygame.display.Info().current_h 
     road_bottom_width = SCREEN_WIDTH * 0.8  # 80% of the screen width
     road_top_width = SCREEN_WIDTH * 0.2     # 20% of the screen width (far distance)
 
@@ -129,6 +131,8 @@ def draw_perspective_road():
 
 # Function to calculate lane X position based on Y (depth effect)
 def get_lane_x_position(lane, y):
+    SCREEN_WIDTH = pygame.display.Info().current_w 
+    SCREEN_HEIGHT =  pygame.display.Info().current_h 
     road_bottom_width = SCREEN_WIDTH * 0.8
     road_top_width = SCREEN_WIDTH * 0.2
 
@@ -152,3 +156,36 @@ def add_obstacle():
     }
     obstacles.append(new_obstacle)
 
+
+class RoadRenderer:
+    def __init__(self, screen, road_image):
+        self.screen = screen
+        self.road_image = road_image
+        self.screen_width = screen.get_width()
+        self.screen_height = screen.get_height()
+        
+    def render(self, car_x=0):
+        # Update screen dimensions
+        self.screen_width = self.screen.get_width()
+        self.screen_height = self.screen.get_height()
+        
+        # Render road slices with perspective effect
+        for i in range(self.screen_height):
+            # Calculate scale based on distance from viewer
+            scale = (self.screen_height - i) / self.screen_height
+            
+            # Calculate position of the road slice
+            y = int(car_x % self.road_image.get_height())
+            road_slice = self.road_image.subsurface((0, y, self.road_image.get_width(), 1))
+            
+            # Scale the slice to create perspective effect
+            scaled_slice = pygame.transform.scale(
+                road_slice, 
+                (int(self.screen_width * scale), 1)
+            )
+            
+            # Position the slice to create vanishing point
+            self.screen.blit(
+                scaled_slice, 
+                (int((self.screen_width / 2) * (1 - scale)), self.screen_height - i)
+            )

@@ -59,6 +59,8 @@ class Player:
 
 # Jay's Legacy
 def Draw_player(): # Ping: อันนี้ไปรวมใน class player เรียบร้อยแล้วนะ
+    SCREEN_HEIGHT =  pygame.display.Info().current_h 
+    player_y  = SCREEN_HEIGHT - 120 #ต้องลบเพราะนับมุมเป็น  0,0 จากบนซ้าย
     player_x = get_lane_x_position(player_lane, player_y) - player_width // 2
     player_scale = 1 + (player_y / SCREEN_HEIGHT)  # Scale the player based on Y position
     scaled_player_width = int(player_width * player_scale)

@@ -13,30 +13,24 @@ low_limit, high_limit = barrier_lowLimit, barrier_highLimit
 
 # Main game loop
 def game():
+        running = True
         global screen
         global fullscreen
-        running = True
         global obsCount
         global low_limit
         global high_limit
         # Main game loop
         roadx = pygame.image.load('pygame/img/road.png').convert()
-        road =  pygame.transform.scale(roadx,(SCREEN_WIDTH,SCREEN_HEIGHT))
-
+        road = pygame.transform.scale(roadx, (roadx.get_width(), roadx.get_height()))
         clock = pygame.time.Clock()
-
         car_x=0
-
-
+        road_renderer = RoadRenderer(screen, road)
         while running:
             screen.fill(WHITE)
-            screen.fill(WHITE)
-    
-    # Calculate delta time for smooth movement
+            # Calculate delta time for smooth movement
             delta = clock.tick() / 1000 + 0.00001
             road_speed =1000
             road_speed += player.speed*2 # ใช้ความเร็วของผู้เล่นเป็นตัวกำหนดความเร็วของถนน
-    
             car_x += delta * road_speed  # เคลื่อนที่ถนนตามความเร็วของผู้เล่
 
             # Event handling
@@ -47,6 +41,7 @@ def game():
                 if event.type == VIDEORESIZE:
                     if not fullscreen:
                         screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+                        road_renderer.screen = screen
                     
                 if event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
@@ -58,20 +53,23 @@ def game():
                         else:
                             screen = pygame.display.set_mode((screen.get_width(), screen.get_height()), pygame.RESIZABLE)
 
-            screen.fill((100, 150, 250))
+            # screen.fill((100, 150, 250))
     
-            for i in range(800):
-                scale = (800- i) /800
-                x = car_x + i/scale
-                road_slice = road.subsurface((0, x % 320,800, 1))  # Change to 800 width
-                scaled_slice = pygame.transform.scale(road_slice, (800 * scale, 1))  # Scale to fit width of screen
+            # for i in range(800):
+            #     scale = (800- i) /800
+            #     x = car_x + i/scale
+            #     road_slice = road.subsurface((0, x % 320,800, 1))  # Change to 800 width
+            #     scaled_slice = pygame.transform.scale(road_slice, (800 * scale, 1))  # Scale to fit width of screen
         
     
-                screen.blit(scaled_slice, (400 - 400 * scale, 600 - i))  # Center the road on the screen
-
+            #     screen.blit(scaled_slice, (400 - 400 * scale, 600 - i))  # Center the road on the screen
+            delta = clock.tick() / 1000.0
+            road_speed = 1000 + player.speed * 2  # Use player's speed to determine road speed
+            car_x += delta * road_speed  # Move the road based on player's speed
+            road_renderer.render(car_x)
 
             player.Player_controller()
-
+            
             # Add obstacles
             if len(obstacles) < 2:
                 if obsCount > 5:

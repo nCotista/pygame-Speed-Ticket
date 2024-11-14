@@ -1281,54 +1281,226 @@
 # options_menu = OptionsMenu(screen, font, uibg, mainClock)
 # options_menu.run()
 
+# import pygame
+# UNSELECTED = "red"
+# SELECTED = "white"
+# BUTTONSTATES = {
+#     True:SELECTED,
+#     False:UNSELECTED
+# }
+
+# class Slider:
+#     def __init__(self, pos: tuple, size: tuple, initial_val: float, min: int, max: int) -> None:
+#         self.pos = pos
+#         self.size = size
+#         self.hovered = False
+#         self.grabbed = False
+
+#         self.slider_left_pos = self.pos[0] - (size[0]//2)
+#         self.slider_right_pos = self.pos[0] + (size[0]//2)
+#         self.slider_top_pos = self.pos[1] - (size[1]//2)
+
+#         self.min = min
+#         self.max = max
+#         self.initial_val = (self.slider_right_pos-self.slider_left_pos)*initial_val # <- percentage
+
+#         self.container_rect = pygame.Rect(self.slider_left_pos, self.slider_top_pos, self.size[0], self.size[1])
+#         self.button_rect = pygame.Rect(self.slider_left_pos + self.initial_val - 5, self.slider_top_pos, 10, self.size[1])
+
+#         # label
+#         # self.text = UI.fonts['m'].render(str(int(self.get_value())), True, "white", None)
+#         # self.label_rect = self.text.get_rect(center = (self.pos[0], self.slider_top_pos - 15))
+        
+#     def move_slider(self, mouse_pos):
+#         pos = mouse_pos[0]
+#         if pos < self.slider_left_pos:
+#             pos = self.slider_left_pos
+#         if pos > self.slider_right_pos:
+#             pos = self.slider_right_pos
+#         self.button_rect.centerx = pos
+#     def hover(self):
+#         self.hovered = True
+#     def render(self, app):
+#         pygame.draw.rect(app.screen, "darkgray", self.container_rect)
+#         pygame.draw.rect(app.screen, BUTTONSTATES[self.hovered], self.button_rect)
+#     def get_value(self):
+#         val_range = self.slider_right_pos - self.slider_left_pos - 1
+#         button_val = self.button_rect.centerx - self.slider_left_pos
+
+#         return (button_val/val_range)*(self.max-self.min)+self.min
+#     def update_display_value(self):
+#         # Update the display text with the current value
+#         self.display_text.setText(f"Value: {int(self.get_value())}")
+        
+
+
+# import pygame
+# from players import *
+# player = Player()
+# class RoadRenderer:
+#     def __init__(self, screen, road_image, screen_width=800, screen_height=600):
+#         self.screen = screen
+#         self.road_image = road_image
+#         self.screen_width = screen_width
+#         self.screen_height = screen_height
+#         self.car_x = 0
+        
+#     def render(self, car_x=0):
+#         self.car_x = car_x
+        
+#         # Render road slices with perspective effect
+#         for i in range(self.screen_height):
+#             # Calculate scale based on distance from viewer
+#             scale = (self.screen_height - i) / self.screen_height
+            
+#             # Calculate horizontal position of road slice
+#             x = self.car_x + i / scale
+            
+#             # Extract a horizontal slice from the road image
+#             road_slice = self.road_image.subsurface(
+#                 (0, int(x % self.road_image.get_height()), 
+#                  self.screen_width, 1)
+#             )
+            
+#             # Scale the slice to create perspective effect
+#             scaled_slice = pygame.transform.scale(
+#                 road_slice, 
+#                 (int(self.screen_width * scale), 1)
+#             )
+            
+#             # Position the slice to create vanishing point
+#             self.screen.blit(
+#                 scaled_slice, 
+#                 (int(self.screen_width / 2 - (self.screen_width / 2 * scale)), 
+#                  self.screen_height - i)
+#             )
+
+# # Example usage
+# def main():
+#     pygame.init()
+#     screen_width, screen_height = 800, 600
+#     screen = pygame.display.set_mode((screen_width, screen_height))
+    
+#     # Load road image
+#     roadx = pygame.image.load('pygame/img/road.png').convert()
+#     road = pygame.transform.scale(roadx, (screen_width, screen_height))
+    
+#     # Create road renderer
+#     road_renderer = RoadRenderer(screen, road, screen_width, screen_height)
+    
+#     # Game loop
+#     running = True
+#     clock = pygame.time.Clock()
+#     car_x = 0
+    
+#     while running:
+#         for event in pygame.event.get():
+#             if event.type == pygame.QUIT:
+#                 running = False
+        
+#         # Calculate delta time for smooth movement
+#         delta = clock.tick(60) / 1000 + 0.00001
+        
+#         # Update road position
+#         road_speed = 1000
+#         road_speed += player.speed * 2  # Use player's speed to determine road speed
+#         car_x += delta * road_speed  # Move the road based on player's speed
+        
+#         # Render the road
+#         road_renderer.render(car_x)
+        
+#         # Update the display
+#         pygame.display.flip()
+    
+#     pygame.quit()
+
+# if __name__ == "__main__":
+#     main()
+
+
+
 import pygame
-UNSELECTED = "red"
-SELECTED = "white"
-BUTTONSTATES = {
-    True:SELECTED,
-    False:UNSELECTED
-}
+from players import Player
 
-class Slider:
-    def __init__(self, pos: tuple, size: tuple, initial_val: float, min: int, max: int) -> None:
-        self.pos = pos
-        self.size = size
-        self.hovered = False
-        self.grabbed = False
-
-        self.slider_left_pos = self.pos[0] - (size[0]//2)
-        self.slider_right_pos = self.pos[0] + (size[0]//2)
-        self.slider_top_pos = self.pos[1] - (size[1]//2)
-
-        self.min = min
-        self.max = max
-        self.initial_val = (self.slider_right_pos-self.slider_left_pos)*initial_val # <- percentage
-
-        self.container_rect = pygame.Rect(self.slider_left_pos, self.slider_top_pos, self.size[0], self.size[1])
-        self.button_rect = pygame.Rect(self.slider_left_pos + self.initial_val - 5, self.slider_top_pos, 10, self.size[1])
-
-        # label
-        # self.text = UI.fonts['m'].render(str(int(self.get_value())), True, "white", None)
-        # self.label_rect = self.text.get_rect(center = (self.pos[0], self.slider_top_pos - 15))
+class RoadRenderer:
+    def __init__(self, screen, road_image):
+        self.screen = screen
+        self.road_image = road_image
+        self.screen_width = screen.get_width()
+        self.screen_height = screen.get_height()
         
-    def move_slider(self, mouse_pos):
-        pos = mouse_pos[0]
-        if pos < self.slider_left_pos:
-            pos = self.slider_left_pos
-        if pos > self.slider_right_pos:
-            pos = self.slider_right_pos
-        self.button_rect.centerx = pos
-    def hover(self):
-        self.hovered = True
-    def render(self, app):
-        pygame.draw.rect(app.screen, "darkgray", self.container_rect)
-        pygame.draw.rect(app.screen, BUTTONSTATES[self.hovered], self.button_rect)
-    def get_value(self):
-        val_range = self.slider_right_pos - self.slider_left_pos - 1
-        button_val = self.button_rect.centerx - self.slider_left_pos
-
-        return (button_val/val_range)*(self.max-self.min)+self.min
-    def update_display_value(self):
-        # Update the display text with the current value
-        self.display_text.setText(f"Value: {int(self.get_value())}")
+    def render(self, car_x=0):
+        # Update screen dimensions
+        self.screen_width = self.screen.get_width()
+        self.screen_height = self.screen.get_height()
         
+        # Render road slices with perspective effect
+        for i in range(self.screen_height):
+            # Calculate scale based on distance from viewer
+            scale = (self.screen_height - i) / self.screen_height
+            
+            # Calculate position of the road slice
+            y = int(car_x % self.road_image.get_height())
+            road_slice = self.road_image.subsurface((0, y, self.road_image.get_width(), 1))
+            
+            # Scale the slice to create perspective effect
+            scaled_slice = pygame.transform.scale(
+                road_slice, 
+                (int(self.screen_width * scale), 1)
+            )
+            
+            # Position the slice to create vanishing point
+            self.screen.blit(
+                scaled_slice, 
+                (int((self.screen_width / 2) * (1 - scale)), self.screen_height - i)
+            )
+
+# Example usage
+def main():
+    pygame.init()
+    
+    # Set initial screen size
+    screen_width, screen_height = 800, 600
+    screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
+    
+    # Load road image
+    roadx = pygame.image.load('pygame/img/road.png').convert()
+    road = pygame.transform.scale(roadx, (roadx.get_width(), roadx.get_height()))
+    
+    # Create road renderer
+    road_renderer = RoadRenderer(screen, road)
+    
+    # Create player instance
+    player = Player()
+    
+    # Game loop
+    running = True
+    clock = pygame.time.Clock()
+    car_x = 0
+    
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+            elif event.type == pygame.VIDEORESIZE:
+                # Update the screen size when the window is resized
+                screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+                road_renderer.screen = screen  # Update the road renderer's screen reference
+
+        # Calculate delta time for smooth movement
+        delta = clock.tick(60) / 1000.0
+        
+        # Update road position
+        road_speed = 1000 + player.speed * 2  # Use player's speed to determine road speed
+        car_x += delta * road_speed  # Move the road based on player's speed
+        
+        # Render the road
+        road_renderer.render(car_x)
+        
+        # Update the display
+        pygame.display.flip()
+    
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()
