@@ -4,12 +4,56 @@ from setting import *
 from object import *
 from pygame.locals import * 
 from players import *
-
+from optionmenu import *
 pygame.init()
 player = Player()
 
-obsCount = 0
-low_limit, high_limit = barrier_lowLimit, barrier_highLimit
+def Gameover():
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            
+            # Handle mouse clicks on buttons
+            if start_button.handleEvent(event):
+                game()
+            if meun_button.handleEvent(event):
+                options()
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    running = False
+            
+            if event.type == KEYDOWN:
+                    if event.key == K_ESCAPE:
+                        running = False
+                    if event.key == K_f:
+                        fullscreen = not fullscreen
+                        if fullscreen:
+                            screen = pygame.display.set_mode(monitor_size, pygame.FULLSCREEN)
+                        else:
+                            screen = pygame.display.set_mode((screen.get_width(), screen.get_height()), pygame.RESIZABLE)
+            if event.type == KEYDOWN:
+                    if event.key == K_ESCAPE:
+                        running = False
+                    if event.key == K_f:
+                        fullscreen = not fullscreen
+                        if fullscreen:
+                            screen = pygame.display.set_mode(monitor_size, pygame.FULLSCREEN)
+                        else:
+                            screen = pygame.display.set_mode((screen.get_width(), screen.get_height()), pygame.RESIZABLE)
+        
+        # Drawing
+        screen.fill(BLACK)
+        start_button.draw()
+        start_button.update_position()
+        meun_button.draw()
+        meun_button.update_position()
+        
+        pygame.display.update()
+        clock.tick(60)
+        
 
 # Main game loop
 def game():
@@ -19,12 +63,9 @@ def game():
         global obsCount
         global low_limit
         global high_limit
+        global car_x
         # Main game loop
-        roadx = pygame.image.load('pygame/img/road.png').convert()
-        road = pygame.transform.scale(roadx, (roadx.get_width(), roadx.get_height()))
-        clock = pygame.time.Clock()
-        car_x=0
-        road_renderer = RoadRenderer(screen, road)
+        
         while running:
             screen.fill((66, 182, 245))
             # Calculate delta time for smooth movement
@@ -53,16 +94,7 @@ def game():
                         else:
                             screen = pygame.display.set_mode((screen.get_width(), screen.get_height()), pygame.RESIZABLE)
 
-            # screen.fill((100, 150, 250))
-    
-            # for i in range(800):
-            #     scale = (800- i) /800
-            #     x = car_x + i/scale
-            #     road_slice = road.subsurface((0, x % 320,800, 1))  # Change to 800 width
-            #     scaled_slice = pygame.transform.scale(road_slice, (800 * scale, 1))  # Scale to fit width of screen
-        
-       
-            #     screen.blit(scaled_slice, (400 - 400 * scale, 600 - i))  # Center the road on the screen
+            
             delta = clock.tick() / 1000.0
             road_speed = 1000 + player.speed * 2  # Use player's speed to determine road speed
             car_x += delta * road_speed  # Move the road based on player's speed
@@ -93,6 +125,7 @@ def game():
                     elif type(obs) == Barrier:
                         if player.speed < obs.speedLimit:
                             print('Game Over')
+                            Gameover()
                             running = False
                         else:
                             player.acceleration(-1*obs.speedLimit)
@@ -109,5 +142,5 @@ def game():
             fr = 60 + player.speed/player_speed_ratio
             pygame.time.Clock().tick(fr)
 
-        # Quit Pygame
         
+    

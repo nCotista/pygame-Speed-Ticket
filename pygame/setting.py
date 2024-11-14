@@ -1,6 +1,6 @@
 import pygame
 from pygame.locals import *
-from typing import List, Any
+from typing import  Any
 pygame.init()
 
 # Screen dimensions
@@ -14,7 +14,6 @@ font = pygame.font.SysFont(None, 20)
 
 button_x = 0  # Center the button horizontally  เพราะ มันจะถูกแก้ที่ ฟังชั่น อัพเดทตลอดเวลาเลยไม่ต้องสนตำแหน่องเริ่มต้น
 button_y = 0  # Center the button vertically
-# window = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
 #Colors
 WHITE = (255, 255, 255)
@@ -25,7 +24,6 @@ BUTTON_COLOR = (100, 200, 100)
 BUTTON_HOVER_COLOR = (50, 150, 50)
 
 
-# Player settings
 # Player settings
 player_y = SCREEN_HEIGHT - 120  # Fixed Y position for the player (close to bottom)
 player_width, player_height = 50, 100
@@ -48,3 +46,15 @@ MuDi_spawn_rate = 20 # chance of a MuDi_obstacle to spawn (%)
 barrier_lowLimit = 100
 barrier_highLimit = 500
 barrier_addConstant = 500
+
+# Obstacle Barrier
+obsCount = 0
+low_limit, high_limit = barrier_lowLimit, barrier_highLimit
+
+
+
+
+
+
+
+

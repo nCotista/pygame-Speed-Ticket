@@ -1,8 +1,6 @@
 import random
 from setting import *
 import pygame
-# from pygame_widgets.slider import Slider
-# from pygame_widgets.textbox import TextBox
 from pygame.locals import *
 import pygwidgets
 
@@ -239,18 +237,6 @@ def get_lane_x_position(lane, y):
         return SCREEN_WIDTH // 2 + road_width_at_y // 4
 
 
-# # Jay's Legacy
-# def add_obstacle():
-#     lane = random.choice([0, 1])
-#     size = random.randint(30, 50)
-#     new_obstacle = {
-#         "lane": lane,
-#         "y": -size,  # - เพื่อให้มันมาจากสุดจอ
-#         "size": size
-#     }
-#     obstacles.append(new_obstacle)
-
-
 class RoadRenderer:
     def __init__(self, screen, road_image):
         self.screen = screen
@@ -284,7 +270,7 @@ class RoadRenderer:
                 (int((self.screen_width / 2) * (1 - scale)), self.screen_height - i)
             )
 
-#this object need to load before
+#this object need to load 
 #picture
 background = pygame.image.load('pygame/img/Pixellance.png')
 uibg = pygame.image.load('pygame/img/uibg.jpg')
@@ -292,10 +278,18 @@ uibg = pygame.image.load('pygame/img/uibg.jpg')
 #button from creater
 start_button = CustomButton(screen, 200, -150, 'pygame/img/startb.png') #note the same value !!!!!!!!11
 meun_button = CustomButton(screen, 0, -150, 'pygame/img/menu.png') 
+Gameoverte = CustomButton(screen, 0, -150, 'pygame/img/menu.png') 
 
 #pygwidgets object
 musicSound = pygwidgets.BackgroundSound('pygame/sound/bgm.mp3')
 myDisplayText = pygwidgets.DisplayText(screen, (100, 200),textColor=(255, 255, 255))
-
+GameoverText = pygwidgets.DisplayText(screen, (100, 200),textColor=(255, 255, 255))
 
 slider = Slider(screen, initial_val=0.5, min=0, max=100)
+
+
+roadx = pygame.image.load('pygame/img/road.png').convert()
+road = pygame.transform.scale(roadx, (roadx.get_width(), roadx.get_height()))
+clock = pygame.time.Clock()
+car_x=0
+road_renderer = RoadRenderer(screen, road)

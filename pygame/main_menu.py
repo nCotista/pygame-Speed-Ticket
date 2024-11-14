@@ -55,9 +55,7 @@ def main_menu():
                     else:
                         screen = pygame.display.set_mode((screen.get_width(), screen.get_height()), pygame.RESIZABLE)
                         slider.update_size_and_position()
-            # if event.type == MOUSEBUTTONDOWN:
-            #     if event.button == 1:
-            #         click = True
+
             if start_button.handleEvent(event):
                 game()
             if meun_button.handleEvent(event):
