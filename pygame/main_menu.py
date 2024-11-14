@@ -19,10 +19,8 @@ click = False
 def main_menu():
     global screen
     global fullscreen
-    # musicSound.play()
     mixer.music.load('pygame/sound/bgm.mp3')
     mixer.music.play(-1)
-    # mixer.music.set_volume(slider.get_value())
 
     while True:
 
@@ -44,7 +42,7 @@ def main_menu():
             if event.type == VIDEORESIZE:
                 if not fullscreen:
                     screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-                
+                    slider.update_size_and_position()
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     pygame.quit()
@@ -53,8 +51,10 @@ def main_menu():
                     fullscreen = not fullscreen
                     if fullscreen:
                         screen = pygame.display.set_mode(monitor_size, pygame.FULLSCREEN)
+                        slider.update_size_and_position()
                     else:
                         screen = pygame.display.set_mode((screen.get_width(), screen.get_height()), pygame.RESIZABLE)
+                        slider.update_size_and_position()
             # if event.type == MOUSEBUTTONDOWN:
             #     if event.button == 1:
             #         click = True

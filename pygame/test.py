@@ -1419,88 +1419,305 @@
 
 
 
+# import pygame
+# from players import Player
+
+# class RoadRenderer:
+#     def __init__(self, screen, road_image):
+#         self.screen = screen
+#         self.road_image = road_image
+#         self.screen_width = screen.get_width()
+#         self.screen_height = screen.get_height()
+        
+#     def render(self, car_x=0):
+#         # Update screen dimensions
+#         self.screen_width = self.screen.get_width()
+#         self.screen_height = self.screen.get_height()
+        
+#         # Render road slices with perspective effect
+#         for i in range(self.screen_height):
+#             # Calculate scale based on distance from viewer
+#             scale = (self.screen_height - i) / self.screen_height
+            
+#             # Calculate position of the road slice
+#             y = int(car_x % self.road_image.get_height())
+#             road_slice = self.road_image.subsurface((0, y, self.road_image.get_width(), 1))
+            
+#             # Scale the slice to create perspective effect
+#             scaled_slice = pygame.transform.scale(
+#                 road_slice, 
+#                 (int(self.screen_width * scale), 1)
+#             )
+            
+#             # Position the slice to create vanishing point
+#             self.screen.blit(
+#                 scaled_slice, 
+#                 (int((self.screen_width / 2) * (1 - scale)), self.screen_height - i)
+#             )
+
+# # Example usage
+# def main():
+#     pygame.init()
+    
+#     # Set initial screen size
+#     screen_width, screen_height = 800, 600
+#     screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
+    
+#     # Load road image
+#     roadx = pygame.image.load('pygame/img/road.png').convert()
+#     road = pygame.transform.scale(roadx, (roadx.get_width(), roadx.get_height()))
+    
+#     # Create road renderer
+#     road_renderer = RoadRenderer(screen, road)
+    
+#     # Create player instance
+#     player = Player()
+    
+#     # Game loop
+#     running = True
+#     clock = pygame.time.Clock()
+#     car_x = 0
+    
+#     while running:
+#         for event in pygame.event.get():
+#             if event.type == pygame.QUIT:
+#                 running = False
+#             elif event.type == pygame.VIDEORESIZE:
+#                 # Update the screen size when the window is resized
+#                 screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+#                 road_renderer.screen = screen  # Update the road renderer's screen reference
+
+#         # Calculate delta time for smooth movement
+#         delta = clock.tick(60) / 1000.0
+        
+#         # Update road position
+#         road_speed = 1000 + player.speed * 2  # Use player's speed to determine road speed
+#         car_x += delta * road_speed  # Move the road based on player's speed
+        
+#         # Render the road
+#         road_renderer.render(car_x)
+        
+#         # Update the display
+#         pygame.display.flip()
+    
+#     pygame.quit()
+
+# if __name__ == "__main__":
+#     main()
+
+
+
+
+from setting import *
 import pygame
-from players import Player
+from object import *
 
-class RoadRenderer:
-    def __init__(self, screen, road_image):
-        self.screen = screen
-        self.road_image = road_image
-        self.screen_width = screen.get_width()
-        self.screen_height = screen.get_height()
-        
-    def render(self, car_x=0):
-        # Update screen dimensions
-        self.screen_width = self.screen.get_width()
-        self.screen_height = self.screen.get_height()
-        
-        # Render road slices with perspective effect
-        for i in range(self.screen_height):
-            # Calculate scale based on distance from viewer
-            scale = (self.screen_height - i) / self.screen_height
-            
-            # Calculate position of the road slice
-            y = int(car_x % self.road_image.get_height())
-            road_slice = self.road_image.subsurface((0, y, self.road_image.get_width(), 1))
-            
-            # Scale the slice to create perspective effect
-            scaled_slice = pygame.transform.scale(
-                road_slice, 
-                (int(self.screen_width * scale), 1)
-            )
-            
-            # Position the slice to create vanishing point
-            self.screen.blit(
-                scaled_slice, 
-                (int((self.screen_width / 2) * (1 - scale)), self.screen_height - i)
-            )
+import pygame
+import pygame
+import sys
 
-# Example usage
-def main():
-    pygame.init()
-    
-    # Set initial screen size
-    screen_width, screen_height = 800, 600
-    screen = pygame.display.set_mode((screen_width, screen_height), pygame.RESIZABLE)
-    
-    # Load road image
-    roadx = pygame.image.load('pygame/img/road.png').convert()
-    road = pygame.transform.scale(roadx, (roadx.get_width(), roadx.get_height()))
-    
-    # Create road renderer
-    road_renderer = RoadRenderer(screen, road)
-    
-    # Create player instance
-    player = Player()
-    
-    # Game loop
-    running = True
-    clock = pygame.time.Clock()
-    car_x = 0
-    
-    while running:
+# Screen Constants
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 720
+DEFAULT_SCREEN_HEIGHT = 720
+
+# Game Configuration
+PLAYER_WIDTH = 100
+PLAYER_HEIGHT = 200
+PLAYER_LANE = 1  # Middle lane
+PLAYER_Y = DEFAULT_SCREEN_HEIGHT * 0.8  # Position at 80% of screen height
+
+# Color Constants
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
+
+class Player:
+    def __init__(self, player_width, player_height, player_lane, player_y):
+        self.width = player_width
+        self.height = player_height
+        self.lane = player_lane
+        self.base_y = player_y  # Store the base Y position
+        self.update_y_position()  # Initialize the y position based on the current screen size
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.speed = 0
+
+        # Load and scale the car image
+        self.image = pygame.image.load('pygame/img/car.png').convert_alpha()
+        self.image = pygame.transform.scale(self.image, (self.width, self.height))
+
+        self.font = pygame.font.Font(None, 72)
+        self.update_speed_text()
+
+    def get_lane_x_position(self, lane):
+        # Assuming you have a function to get lane x position
+        return lane * (SCREEN_WIDTH // 2)  # Example: Adjust based on your lane logic
+
+    def update_speed_text(self):
+        self.text = self.font.render(str(self.speed), True, (255, 255, 255))
+        self.text_rect = self.text.get_rect(center=(self.x + 25, self.y - 50))
+
+    def update_y_position(self):
+        # Update the y position based on the current screen height
+        screen_height = pygame.display.Info().current_h
+        self.y = self.base_y * (screen_height / DEFAULT_SCREEN_HEIGHT)  # Adjust based on a default screen height
+        self.rect.y = self.y  # Update rect position
+
+    def player_controller(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_LEFT] and self.lane > 0:
+            self.lane -= 1
+        if keys[pygame.K_RIGHT] and self.lane < 1:
+            self.lane += 1
+        
+        # Update x position based on lane
+        self.x = self.get_lane_x_position(self.lane) - self.width // 2
+        self.rect.x = self.x  # Update rect position
+
+        # Scale the player based on Y position
+        player_scale = 1 + (self.y / SCREEN_HEIGHT)  # Scale the player based on Y position
+        scaled_player_width = int(self.width * player_scale)
+        scaled_player_height = int(self.height * player_scale)
+
+        # Update rect with new size
+        self.rect = pygame.Rect(self.x, self.y, scaled_player_width, scaled_player_height)
+
+        # Draw the scaled image
+        scaled_image = pygame.transform.scale(self.image, (scaled_player_width, scaled_player_height))
+        screen.blit(scaled_image, (self.x, self.y))
+
+        # Update and draw speed text
+        self.update_speed_text()
+        screen.blit(self.text, self.text_rect)
+
+    def acceleration(self, increasing):
+        self.speed += increasing
+        self.speed = max(0, self.speed)  # Prevent negative speed
+
+    def update_y(self, delta_y):
+        self.base_y += delta_y
+        self.update_y_position()  # Update the rect position based on the new base_y
+
+
+
+class Game:
+    def __init__(self):
+        # Initialize Pygame
+        pygame.init()
+
+        # Set up the display
+        self.screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
+        pygame.display.set_caption("Car Racing Game")
+
+        # Create player
+        self.player = Player(
+            player_width=PLAYER_WIDTH, 
+            player_height=PLAYER_HEIGHT, 
+            player_lane=PLAYER_LANE, 
+            player_y=PLAYER_Y
+        )
+
+        # Game clock
+        self.clock = pygame.time.Clock()
+
+        # Game state variables
+        self.running = True
+        self.speed = 0
+        self.acceleration_rate = 0.1
+        self.deceleration_rate = 0.05
+
+    def handle_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
-            elif event.type == pygame.VIDEORESIZE:
-                # Update the screen size when the window is resized
-                screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
-                road_renderer.screen = screen  # Update the road renderer's screen reference
+                self.running = False
+            
+            # Handle screen resize
+            if event.type == pygame.VIDEORESIZE:
+                self.screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+                # Update player y-position when screen is resized
+                self.player.update_y_position()
 
-        # Calculate delta time for smooth movement
-        delta = clock.tick(60) / 1000.0
-        
-        # Update road position
-        road_speed = 1000 + player.speed * 2  # Use player's speed to determine road speed
-        car_x += delta * road_speed  # Move the road based on player's speed
-        
-        # Render the road
-        road_renderer.render(car_x)
-        
-        # Update the display
+            # Acceleration and deceleration controls
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_UP:
+                    self.speed += self.acceleration_rate
+                elif event.key == pygame.K_DOWN:
+                    self.speed = max(0, self.speed - self.deceleration_rate)
+
+    def update(self):
+        # Update player controller (lane switching)
+        self.player.player_controller()
+
+        # Update player speed
+        self.player.acceleration(self.speed)
+
+        # Optional: Move player forward based on speed
+        self.player.update_y(self.speed)
+
+    def render(self):
+        # Clear the screen
+        self.screen.fill(BLACK)
+
+        # Render player
+        self.player.player_controller()
+
+        # Update display
         pygame.display.flip()
+
+    def run(self):
+        while self.running:
+            # Handle events
+            self.handle_events()
+
+            # Update game state
+            self.update()
+
+            # Render game
+            self.render()
+
+            # Control frame rate
+            self.clock.tick(60)
+
+        # Quit the game
+        pygame.quit()
+        sys.exit()
+
+# Advanced Usage Example with Multiple Players
+class MultiPlayerGame(Game):
+    def __init__(self):
+        super().__init__()
+        # Create multiple players
+        self.players = [
+            Player(player_width=PLAYER_WIDTH, player_height=PLAYER_HEIGHT, player_lane=0, player_y=PLAYER_Y),
+            Player(player_width=PLAYER_WIDTH, player_height=PLAYER_HEIGHT, player_lane=1, player_y=PLAYER_Y)
+        ]
+
+    def update(self):
+        # Update each player
+        for player in self.players:
+            player.player_controller()
+            player.acceleration(self.speed)
+            player.update_y(self.speed)
+
+    def render(self):
+        self.screen.fill(BLACK)
+        
+        # Render each player
+        for player in self.players:
+            player.player_controller()
+
+        pygame.display.flip()
+
+# Main execution
+def main():
+    # Choose the game mode
+    game_mode = input("Select game mode (1: Single Player, 2: Multiplayer): ")
     
-    pygame.quit()
+    if game_mode == '1':
+        game = Game()
+    else:
+        game = MultiPlayerGame()
+    
+    game.run()
 
 if __name__ == "__main__":
     main()

@@ -9,6 +9,8 @@ from object import *
 def options():
     running = True
     while running:
+        global screen
+        global fullscreen        
         screen.fill((0,0,0))
 
         # draw_text('options', font, (255, 255, 255), screen, 20, 20)
@@ -21,10 +23,24 @@ def options():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
+            if event.type == VIDEORESIZE:
+                if not fullscreen:
+                    screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
+                    slider.update_size_and_position()
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     running = False
+                if event.key == K_f:
+                    fullscreen = not fullscreen
+                    if fullscreen:
+                        screen = pygame.display.set_mode(monitor_size, pygame.FULLSCREEN)
+                        slider.update_size_and_position()
+                    else:
+                        screen = pygame.display.set_mode((screen.get_width(), screen.get_height()), pygame.RESIZABLE)
+                        slider.update_size_and_position()
+                    
             
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:  # Left mouse button
                         if slider.button_rect.collidepoint(event.pos):

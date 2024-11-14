@@ -26,7 +26,7 @@ def game():
         car_x=0
         road_renderer = RoadRenderer(screen, road)
         while running:
-            screen.fill(WHITE)
+            screen.fill((66, 182, 245))
             # Calculate delta time for smooth movement
             delta = clock.tick() / 1000 + 0.00001
             road_speed =1000
@@ -61,12 +61,13 @@ def game():
             #     road_slice = road.subsurface((0, x % 320,800, 1))  # Change to 800 width
             #     scaled_slice = pygame.transform.scale(road_slice, (800 * scale, 1))  # Scale to fit width of screen
         
-    
+       
             #     screen.blit(scaled_slice, (400 - 400 * scale, 600 - i))  # Center the road on the screen
             delta = clock.tick() / 1000.0
             road_speed = 1000 + player.speed * 2  # Use player's speed to determine road speed
             car_x += delta * road_speed  # Move the road based on player's speed
             road_renderer.render(car_x)
+            
 
             player.Player_controller()
             

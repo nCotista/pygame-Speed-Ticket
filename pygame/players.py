@@ -53,6 +53,13 @@ class Player:
 
     def acceleration(self, increasing):
         self.speed += increasing
+    
+    def update_y(self):
+        screen_width = pygame.display.Info().current_w 
+        screen_height = pygame.display.Info().current_h 
+        self.rect.update(screen_width,screen_height)
+        pass
+
 
 
 
