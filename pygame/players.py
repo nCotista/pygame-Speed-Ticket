@@ -25,8 +25,45 @@ class Player:
         keys = pygame.key.get_pressed()
         if keys[pygame.K_LEFT] and self.lane > 0:
             self.lane -= 1
+            turn_sound.play()
         if keys[pygame.K_RIGHT] and self.lane < 1:
             self.lane += 1
+            turn_sound.play()
+
+    def __init__(self):
+        self.width = player_width
+        self.height = player_height
+        self.lane = player_lane
+        self.x = get_lane_x_position(self.lane, player_y) - self.width // 2
+        self.y = player_y
+        self.rect = pygame.Rect(self.x, self.y, self.width, self.height)
+        self.speed = 0
+        self.image = pygame.image.load('pygame/img/car.png').convert_alpha()
+        self.image = pygame.transform.scale(self.image, (self.width, self.height))
+        self.font = pygame.font.Font(None, 72)
+        self.text = self.font.render(str(self.speed), True, (255, 255, 255))
+        self.text_rect = self.text.get_rect(center=(self.x + 25, self.y - 50))
+        self.movement_delay = 0
+
+    def Player_controller(self):
+        keys = pygame.key.get_pressed()
+        current_time = pygame.time.get_ticks()
+        if keys[pygame.K_LEFT] and self.lane > 0 and current_time - self.movement_delay > 200:
+            self.lane -= 1
+            turn_sound.play()
+            self.movement_delay = current_time
+        if keys[pygame.K_RIGHT] and self.lane < 1 and current_time - self.movement_delay > 200:
+            self.lane += 1
+            turn_sound.play()
+            self.movement_delay = current_time
+
+        self.x = get_lane_x_position(self.lane, player_y) - self.width // 2
+        player_scale = 1 + (self.y / SCREEN_HEIGHT)  
+        scaled_player_width = int(self.width * player_scale)
+        scaled_player_height = int(self.height * player_scale)
+        self.rect = pygame.Rect(self.x, self.y, scaled_player_width, scaled_player_height)
+
+        scaled_image = pygame.transform.scale(self.image, (scaled_player_width, scaled_player_height))
         # TODO: Add a delay to the movement
 
         self.x = get_lane_x_position(self.lane, player_y) - self.width // 2

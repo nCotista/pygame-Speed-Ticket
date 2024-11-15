@@ -181,7 +181,7 @@ class Barrier(Obstacle):
         super().__init__(lane)
 
         # Load barrier image
-        self.image = pygame.image.load('pygame/img/car.png').convert_alpha()
+        self.image = pygame.image.load('pygame/img/wall.jpg').convert_alpha()
         self.image = pygame.transform.scale(self.image, (self.size, self.size))
         
         # Barrier-specific speed limit
@@ -203,24 +203,6 @@ def create_obstacle():
 def create_barrier(low, high):
     obstacles.append(Barrier(0, low, high))
     obstacles.append(Barrier(1, low, high))
-
-# Function to draw the road with perspective
-def draw_perspective_road():
-    # Bottom part of the road (close to player)
-    SCREEN_WIDTH = pygame.display.Info().current_w 
-    SCREEN_HEIGHT =  pygame.display.Info().current_h 
-    road_bottom_width = SCREEN_WIDTH * 0.8  # 80% of the screen width
-    road_top_width = SCREEN_WIDTH * 0.2     # 20% of the screen width (far distance)
-
-    # Define the four points of the trapezoid (road) เพื่อเอามาวาดคางหมูกลางจอ
-    road_bottom_left = (SCREEN_WIDTH // 2 - road_bottom_width // 2, SCREEN_HEIGHT) #(x,y)  x จับหารสองจะได้กลางจอ อยากได้ความกว้าง80 จับหารสองอีกฝั่งนึงเอาไปบวก อีกฝั่งเอาไปลบจากกลางจอจะรวมกันได้ % ที่ต้องการ
-    road_bottom_right = (SCREEN_WIDTH // 2 + road_bottom_width // 2, SCREEN_HEIGHT) # y  SCREEN_HEIGHT ให้พิกัดล่างสุด 0 ให้บนสุด
-    road_top_left = (SCREEN_WIDTH // 2 - road_top_width // 2, 0)
-    road_top_right = (SCREEN_WIDTH // 2 + road_top_width // 2, 0)
-
-    # Draw the road as a trapezoid
-    pygame.draw.polygon(screen, ROAD_COLOR, [road_bottom_left, road_bottom_right, road_top_right, road_top_left])
-
 # Function to calculate lane X position based on Y (depth effect)
 def get_lane_x_position(lane, y):
     SCREEN_WIDTH = pygame.display.Info().current_w 
@@ -253,10 +235,10 @@ class RoadRenderer:
         for i in range(self.screen_height):
             # Calculate scale based on distance from viewer
             scale = (self.screen_height - i) / self.screen_height
-            
+            x = car_x + i/scale
             # Calculate position of the road slice
-            y = int(car_x % self.road_image.get_height())
-            road_slice = self.road_image.subsurface((0, y, self.road_image.get_width(), 1))
+            
+            road_slice = self.road_image.subsurface((0, x%self.road_image.get_height(), self.road_image.get_width(), 1))
             
             # Scale the slice to create perspective effect
             scaled_slice = pygame.transform.scale(
