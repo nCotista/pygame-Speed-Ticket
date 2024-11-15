@@ -9,6 +9,8 @@ pygame.init()
 player = Player()
 
 def Gameover():
+    global screen
+    global fullscreen
     running = True
     while running:
         for event in pygame.event.get():
