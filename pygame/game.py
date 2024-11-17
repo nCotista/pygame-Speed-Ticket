@@ -12,6 +12,8 @@ def Gameover():
     global screen
     global fullscreen
     running = True
+    scaled_died = pygame.transform.scale(died1, (screen.get_width(), screen.get_height()))
+    screen.blit(scaled_died, (0, 0))  # Draw the scaled background
     while running:
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -47,7 +49,7 @@ def Gameover():
                             screen = pygame.display.set_mode((screen.get_width(), screen.get_height()), pygame.RESIZABLE)
         
         # Drawing
-        screen.fill(BLACK)
+        
         start_button.draw()
         start_button.update_position()
         meun_button.draw()
@@ -72,7 +74,7 @@ def game():
             screen.fill((66, 182, 245))
             # Calculate delta time for smooth movement
             delta = mainClock.tick() / 1000 + 0.00001
-            road_speed =1000
+            road_speed =0
             road_speed += player.speed*2 # ใช้ความเร็วของผู้เล่นเป็นตัวกำหนดความเร็วของถนน
             car_x += delta * road_speed  # เคลื่อนที่ถนนตามความเร็วของผู้เล่
             turn_sound.set_volume(slider.get_value())
@@ -128,6 +130,7 @@ def game():
                     elif type(obs) == Barrier:
                         if player.speed < obs.speedLimit:
                             print('Game Over')
+                            obs.speedLimit = player.speed 
                             Gameover()
                             running = False
                         else:

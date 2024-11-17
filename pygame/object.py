@@ -256,6 +256,7 @@ class RoadRenderer:
 #picture
 background = pygame.image.load('pygame/img/Pixellance.png')
 uibg = pygame.image.load('pygame/img/uibg.jpg')
+died1 =  pygame.image.load('pygame/img/died.webp')
 
 #button from creater
 start_button = CustomButton(screen, 200, -150, 'pygame/img/startb.png') #note the same value !!!!!!!!11
