@@ -74,8 +74,9 @@ def game():
             screen.fill((66, 182, 245))
             # Calculate delta time for smooth movement
             delta = mainClock.tick() / 1000 + 0.00001
-            road_speed =0
-            road_speed += player.speed*2 # ใช้ความเร็วของผู้เล่นเป็นตัวกำหนดความเร็วของถนน
+            road_speed = (500 + player.speed) if player.speed > 0 else 500 
+            print(road_speed)
+            #road_speed += (player.speed*2)  # ใช้ความเร็วของผู้เล่นเป็นตัวกำหนดความเร็วของถนน
             car_x += delta * road_speed  # เคลื่อนที่ถนนตามความเร็วของผู้เล่
             turn_sound.set_volume(slider.get_value())
 
@@ -101,6 +102,7 @@ def game():
 
             
             delta = clock.tick() / 1000 + 0.00001
+            
             road_speed =  player.speed * 2  # Use player's speed to determine road speed
             car_x += delta * road_speed  # Move the road based on player's speed
             road_renderer.render(car_x)
@@ -145,7 +147,7 @@ def game():
             pygame.display.update()
 
             # Frame rate
-            fr = 60 + player.speed/player_speed_ratio
+            fr = 60
             pygame.time.Clock().tick(fr)
 
         

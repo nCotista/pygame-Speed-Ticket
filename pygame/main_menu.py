@@ -60,9 +60,9 @@ def main_menu():
                 game()
             if meun_button.handleEvent(event):
                 options()
-            if mixer.music.get_busy():
+            #if mixer.music.get_busy():
                 # print("playing")
-                print(slider.get_value())
+                #print(slider.get_value())
     
             
         pygame.display.update()

@@ -90,6 +90,8 @@ class Player:
 
     def acceleration(self, increasing):
         self.speed += increasing
+        if self.speed <= 0:
+            self.speed = 0
     
     def update_y(self):
         screen_width = pygame.display.Info().current_w 
