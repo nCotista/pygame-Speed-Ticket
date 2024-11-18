@@ -186,7 +186,7 @@ class Barrier(Obstacle):
         
         # Barrier-specific speed limit
         self.color = (0, 0, 255)
-        self.speedLimit = random.randint(barrier_lowLimit, barrier_highLimit)
+        self.speedLimit = random.randint(low, high)
         self.text = self.font.render(str(self.speedLimit), True, (255, 255, 255))
         self.text_rect = self.text.get_rect(center=(self.x + 25, self.y - 50))
 
@@ -207,8 +207,8 @@ def create_barrier(low, high):
 def get_lane_x_position(lane, y):
     SCREEN_WIDTH = pygame.display.Info().current_w 
     SCREEN_HEIGHT =  pygame.display.Info().current_h 
-    road_bottom_width = SCREEN_WIDTH * 0.8
-    road_top_width = SCREEN_WIDTH * 0.2
+    road_bottom_width = SCREEN_WIDTH 
+    road_top_width = SCREEN_WIDTH * 0.01
 
     # Linear interpolation between top and bottom lane positions based on Y
     road_width_at_y = road_top_width + (road_bottom_width - road_top_width) * (y / SCREEN_HEIGHT) #come from chat gpt
@@ -261,7 +261,8 @@ died1 =  pygame.image.load('pygame/img/died.webp')
 #button from creater
 start_button = CustomButton(screen, 200, -150, 'pygame/img/startb.png') #note the same value !!!!!!!!11
 meun_button = CustomButton(screen, 0, -150, 'pygame/img/menu.png') 
-Gameoverte = CustomButton(screen, 0, -150, 'pygame/img/menu.png') 
+# Gameoverte = CustomButton(screen, 0, -150, 'pygame/img/menu.png') 
+exit_button = CustomButton(screen, 0, -150, 'pygame/img/menu.png')
 
 #pygwidgets object
 musicSound = pygwidgets.BackgroundSound('pygame/sound/bgm.mp3')
