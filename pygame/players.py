@@ -67,23 +67,23 @@ class Player:
         if self.speed <= 0:
             self.speed = 0
     
-    def update_y(self):
-        screen_width = pygame.display.Info().current_w 
-        screen_height = pygame.display.Info().current_h 
-        self.rect.update(screen_width,screen_height)
-        pass
+    # def update_y(self):
+    #     screen_width = pygame.display.Info().current_w 
+    #     screen_height = pygame.display.Info().current_h 
+    #     self.rect.update(screen_width,screen_height)
+    #     pass
 
 
 
 
 
 # Jay's Legacy
-def Draw_player(): # Ping: อันนี้ไปรวมใน class player เรียบร้อยแล้วนะ
-    SCREEN_HEIGHT =  pygame.display.Info().current_h 
-    player_y  = SCREEN_HEIGHT - 120 #ต้องลบเพราะนับมุมเป็น  0,0 จากบนซ้าย
-    player_x = get_lane_x_position(player_lane, player_y) - player_width // 2
-    player_scale = 1 + (player_y / SCREEN_HEIGHT)  # Scale the player based on Y position
-    scaled_player_width = int(player_width * player_scale)
-    scaled_player_height = int(player_height * player_scale)
+# def Draw_player(): # Ping: อันนี้ไปรวมใน class player เรียบร้อยแล้วนะ
+#     SCREEN_HEIGHT =  pygame.display.Info().current_h 
+#     player_y  = SCREEN_HEIGHT - 120 #ต้องลบเพราะนับมุมเป็น  0,0 จากบนซ้าย
+#     player_x = get_lane_x_position(player_lane, player_y) - player_width // 2
+#     player_scale = 1 + (player_y / SCREEN_HEIGHT)  # Scale the player based on Y position
+#     scaled_player_width = int(player_width * player_scale)
+#     scaled_player_height = int(player_height * player_scale)
 
-    pygame.draw.rect(screen, (0, 128, 255), (player_x, player_y, scaled_player_width, scaled_player_height))
+#     pygame.draw.rect(screen, (0, 128, 255), (player_x, player_y, scaled_player_width, scaled_player_height))

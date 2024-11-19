@@ -252,6 +252,7 @@ class RoadRenderer:
                 (int((self.screen_width / 2) * (1 - scale)), self.screen_height - i)
             )
 
+
 #this object need to load 
 #picture
 background = pygame.image.load('pygame/img/Pixellance.png')
@@ -262,12 +263,12 @@ died1 =  pygame.image.load('pygame/img/died.webp')
 start_button = CustomButton(screen, 200, -150, 'pygame/img/startb.png') #note the same value !!!!!!!!11
 meun_button = CustomButton(screen, 0, -150, 'pygame/img/menu.png') 
 # Gameoverte = CustomButton(screen, 0, -150, 'pygame/img/menu.png') 
-exit_button = CustomButton(screen, 0, -150, 'pygame/img/menu.png')
+exit_button = CustomButton(screen, 0, -150, 'pygame/img/exit.png')
 
 #pygwidgets object
-musicSound = pygwidgets.BackgroundSound('pygame/sound/bgm.mp3')
-myDisplayText = pygwidgets.DisplayText(screen, (100, 200),textColor=(255, 255, 255))
-GameoverText = pygwidgets.DisplayText(screen, (100, 200),textColor=(255, 255, 255))
+# musicSound = pygwidgets.BackgroundSound('pygame/sound/bgm.mp3')
+# myDisplayText = pygwidgets.DisplayText(screen, (100, 200),textColor=(255, 255, 255))
+# GameoverText = pygwidgets.DisplayText(screen, (100, 200),textColor=(255, 255, 255))
 
 slider = Slider(screen, initial_val=0.5, min=0, max=100)
 

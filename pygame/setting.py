@@ -9,9 +9,9 @@ monitor_size = [pygame.display.Info().current_w, pygame.display.Info().current_h
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), pygame.RESIZABLE)
 mainClock = pygame.time.Clock()
 fullscreen = False
-
 font = pygame.font.SysFont(None, 20)
 
+# ui
 button_x = 0  # Center the button horizontally  เพราะ มันจะถูกแก้ที่ ฟังชั่น อัพเดทตลอดเวลาเลยไม่ต้องสนตำแหน่องเริ่มต้น
 button_y = 0  # Center the button vertically
 
