@@ -19,7 +19,6 @@ click = False
 def main_menu():
     global screen
     global fullscreen
-    mixer.music.load('pygame/sound/bgm.mp3')
     mixer.music.play(-1)
 
     while True:
@@ -33,7 +32,6 @@ def main_menu():
         start_button.update_position()
         meun_button.draw()
         meun_button.update_position()
-
 
         for event in pygame.event.get():
             if event.type == QUIT:

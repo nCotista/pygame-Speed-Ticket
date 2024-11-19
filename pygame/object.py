@@ -3,7 +3,7 @@ from setting import *
 import pygame
 from pygame.locals import *
 import pygwidgets
-
+from pygame import mixer
 
 class CustomButton:
     def __init__(self, screen, x, y, image_path):
@@ -271,9 +271,10 @@ GameoverText = pygwidgets.DisplayText(screen, (100, 200),textColor=(255, 255, 25
 
 slider = Slider(screen, initial_val=0.5, min=0, max=100)
 
-
 roadx = pygame.image.load('pygame/img/road.png').convert()
 road = pygame.transform.scale(roadx, (roadx.get_width(), roadx.get_height()))
 clock = pygame.time.Clock()
-car_x=0
 road_renderer = RoadRenderer(screen, road)
+
+turn_sound = pygame.mixer.Sound('pygame/sound/change.ogg')
+mixer.music.load('pygame/sound/bgm.mp3')
