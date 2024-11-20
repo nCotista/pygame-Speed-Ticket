@@ -21,6 +21,7 @@ def options():
         mouse_pos = pygame.mouse.get_pos()
         slider.render()
         slider.hover(mouse_pos)
+        
 
         for event in pygame.event.get():
             if event.type == QUIT:

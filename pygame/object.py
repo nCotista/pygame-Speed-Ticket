@@ -5,6 +5,7 @@ from pygame.locals import *
 import pygwidgets
 from pygame import mixer
 
+
 class CustomButton:
     def __init__(self, screen, x, y, image_path):
         self.screen = screen
@@ -36,7 +37,9 @@ class CustomButton:
                     return True  # Button was clicked
         return False  # Button was not clicked
 
-
+#load music
+mixer.music.load('pygame/sound/bgm.mp3')
+turn_sound = pygame.mixer.Sound('pygame/sound/change.ogg')
 
 class Slider:
     def __init__(self, screen: pygame.Surface, initial_val: float, min: int, max: int):
@@ -145,6 +148,8 @@ class Slider:
         
         # Set the mixer volume based on the slider value (normalize to 0.0 - 1.0)
         pygame.mixer.music.set_volume(value / 100.0)
+        global turn_sound
+        turn_sound.set_volume(value)
 
 
 class Obstacle:
@@ -295,5 +300,3 @@ road = pygame.transform.scale(roadx, (roadx.get_width(), roadx.get_height()))
 clock = pygame.time.Clock()
 road_renderer = RoadRenderer(screen, road)
 
-turn_sound = pygame.mixer.Sound('pygame/sound/change.ogg')
-mixer.music.load('pygame/sound/bgm.mp3')

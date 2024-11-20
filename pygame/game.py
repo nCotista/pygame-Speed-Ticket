@@ -75,7 +75,8 @@ def game():
             road_speed = (500 + player.speed*2) if player.speed > 0 else 500 
             #road_speed += (player.speed*2)  # ใช้ความเร็วของผู้เล่นเป็นตัวกำหนดความเร็วของถนน
             car_x += delta * road_speed  # เคลื่อนที่ถนนตามความเร็วของผู้เล่
-            turn_sound.set_volume(slider.get_value())
+            
+            
 
             # Event handling
             for event in pygame.event.get():
