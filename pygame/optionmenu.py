@@ -18,6 +18,9 @@ def options():
         screen.blit(scaled_uibg, (0, 0))  # Draw the scaled background
         # myDisplayText.setValue('Here is some new text to display')
         # myDisplayText.draw()
+        mouse_pos = pygame.mouse.get_pos()
+        slider.render()
+        slider.hover(mouse_pos)
 
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -27,6 +30,10 @@ def options():
                 if not fullscreen:
                     screen = pygame.display.set_mode((event.w, event.h), pygame.RESIZABLE)
                     slider.update_size_and_position()
+
+            if event.type == pygame.MOUSEWHEEL:
+                slider.handle_mouse_wheel(event)
+
             if event.type == KEYDOWN:
                 if event.key == K_ESCAPE:
                     running = False
@@ -55,8 +62,8 @@ def options():
         if slider.grabbed:
             mouse_pos = pygame.mouse.get_pos()
             slider.move_slider(mouse_pos)
-        # pygame_widgets.update(pygame.event.get())
-        slider.render()
+       
+        
         pygame.display.update()
         mainClock.tick(60)
  

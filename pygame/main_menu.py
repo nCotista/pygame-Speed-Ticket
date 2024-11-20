@@ -11,7 +11,7 @@ from pygame import mixer
 
 # Initialize Pygame
 pygame.init()
-pygame.display.set_caption("My game") 
+pygame.display.set_caption("Speed Ticket") 
 
 
 
@@ -62,7 +62,6 @@ def main_menu():
                 # print("playing")
                 #print(slider.get_value())
     
-            
         pygame.display.update()
         mainClock.tick(60)
 

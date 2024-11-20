@@ -39,7 +39,7 @@ class CustomButton:
 
 
 class Slider:
-    def __init__(self, screen: pygame.Surface, initial_val: float, min: int, max: int) -> None:
+    def __init__(self, screen: pygame.Surface, initial_val: float, min: int, max: int):
         self.screen = screen
         self.min = min
         self.max = max
@@ -63,25 +63,20 @@ class Slider:
         self.pos = (screen_width // 2, screen_height // 2)
         
         # Calculate slider boundaries
-        self.slider_left_pos = self.pos[0] - (self.size[0] // 2)
+        self.slider_left_pos = self.pos[0] - (self.size[0] // 2) #(x,y)
         self.slider_right_pos = self.pos[0] + (self.size[0] // 2)
-        self.slider_top_pos = self.pos[1] - (self.size[1] // 2)
+        self.slider_top_pos = self.pos[1] - (self.size[1] // 2) #pygameg top left
 
         # Create container and button rects with dynamic sizing
         self.container_rect = pygame.Rect(self.slider_left_pos, self.slider_top_pos, self.size[0], self.size[1])
         
         # Calculate button width proportional to slider width
-        button_width = max(10, int(self.size[0] * 0.05))
+        button_width = max(10, int(screen_height * 0.03))
         
-        # Position the button based on initial value
-        button_x = (self.slider_left_pos + 
-                    (self.size[0] * self.initial_val) - 
-                    (button_width // 2))
+        # Position the button based on initial value  bartotal        0.5        - for pos left suit of box
+        button_x = (self.slider_left_pos + (self.size[0] * self.initial_val) - (button_width // 2))
         
-        self.button_rect = pygame.Rect(button_x, 
-                                        self.slider_top_pos, 
-                                        button_width, 
-                                        self.size[1])
+        self.button_rect = pygame.Rect(button_x, self.slider_top_pos, button_width,self.size[1])
 
         # Update display text position
         self.display_text = pygwidgets.DisplayText(
@@ -102,9 +97,32 @@ class Slider:
             pos = self.slider_right_pos
         self.button_rect.centerx = pos
         self.update_display_value()
+    
+    #add from comment
+    def handle_mouse_wheel(self, event):
+    # Check if the mouse is over the slider area
+        if self.container_rect.collidepoint(pygame.mouse.get_pos()):
+            # Adjust value based on scroll direction
+            increment = 1 if event.y > 0 else -1  # Scroll up is positive, down is negative
+            current_val = self.get_value()
+            
+            # Calculate the new value with boundaries
+            new_val = max(self.min, min(self.max, current_val + increment))
+            
+            # Update button position based on the new value
+            val_range = self.slider_right_pos - self.slider_left_pos
+            normalized_pos = (new_val - self.min) / (self.max - self.min)
+            self.button_rect.centerx = int(self.slider_left_pos + normalized_pos * val_range)
+            
+            # Update the displayed value
+            self.update_display_value()
 
-    def hover(self):
-        self.hovered = True
+
+    def hover(self, mouse_pos):
+        if self.container_rect.collidepoint(mouse_pos):
+            self.hovered = True
+        else:
+            self.hovered = False
 
     def render(self):
         # Dynamic colors and rendering based on screen size
@@ -118,7 +136,7 @@ class Slider:
     def get_value(self):
         val_range = self.slider_right_pos - self.slider_left_pos
         button_val = self.button_rect.centerx - self.slider_left_pos
-        return (button_val / val_range) * (self.max - self.min) + self.min
+        return (button_val / val_range) * (self.max - self.min) + self.min #(100 - 0 ) + 0  ++  in case of min not 0
 
     def update_display_value(self):
         # Update the display text with the current value
@@ -134,7 +152,7 @@ class Obstacle:
         self.lane = lane
 
         # Basic + Co-ordinate Setting
-        self.size = random.randint(30,50)
+        self.size = 50 #random.randint(30,50)
         self.y = -self.size
         self.x = get_lane_x_position(self.lane, self.y)
         # Load obstacle image
@@ -208,15 +226,15 @@ def get_lane_x_position(lane, y):
     SCREEN_WIDTH = pygame.display.Info().current_w 
     SCREEN_HEIGHT =  pygame.display.Info().current_h 
     road_bottom_width = SCREEN_WIDTH 
-    road_top_width = SCREEN_WIDTH * 0.01
+    road_top_width = SCREEN_WIDTH * 0.1
 
     # Linear interpolation between top and bottom lane positions based on Y
     road_width_at_y = road_top_width + (road_bottom_width - road_top_width) * (y / SCREEN_HEIGHT) #come from chat gpt
 
     if lane == 0:  # Left lane
-        return SCREEN_WIDTH // 2 - road_width_at_y // 4
+        return SCREEN_WIDTH // 2 - road_width_at_y / 4
     elif lane == 1:  # Right lane
-        return SCREEN_WIDTH // 2 + road_width_at_y // 4
+        return SCREEN_WIDTH // 2 + road_width_at_y / 5
 
 
 class RoadRenderer:

@@ -11,12 +11,8 @@ player = Player()
 def Gameover():
     global screen
     global fullscreen
+    
     running = True
-    # global obstacles
-    # global obsCount
-    # obstacles = []
-    # obsCount = 0
-
     scaled_died = pygame.transform.scale(died1, (screen.get_width(), screen.get_height()))
     screen.blit(scaled_died, (0, 0))  # Draw the scaled background
     while running:
@@ -100,12 +96,9 @@ def game():
                             screen = pygame.display.set_mode(monitor_size, pygame.FULLSCREEN)
                         else:
                             screen = pygame.display.set_mode((screen.get_width(), screen.get_height()), pygame.RESIZABLE)
-
-            
             
             road_renderer.render(car_x)
             
-
             player.Player_controller()
             
             # Add obstacles

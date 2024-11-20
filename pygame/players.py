@@ -32,26 +32,16 @@ class Player:
 
     
         self.x = get_lane_x_position(self.lane, player_y) - self.width // 2
-        player_scale = 1 + (self.y / SCREEN_HEIGHT)  
-        scaled_player_width = int(self.width * player_scale)
-        scaled_player_height = int(self.height * player_scale)
-        self.rect = pygame.Rect(self.x, self.y, scaled_player_width, scaled_player_height)
-
-        scaled_image = pygame.transform.scale(self.image, (scaled_player_width, scaled_player_height))
-        # TODO: Add a delay to the movement
-
-        self.x = get_lane_x_position(self.lane, player_y) - self.width // 2
         player_scale = 1 + (self.y / SCREEN_HEIGHT)  # Scale the player based on Y position
         scaled_player_width = int(self.width * player_scale)
         scaled_player_height = int(self.height * player_scale)
         self.rect = pygame.Rect(self.x, self.y, scaled_player_width, scaled_player_height)
-
+        
         # Update scaled image for depth effect
         scaled_image = pygame.transform.scale(self.image, (scaled_player_width, scaled_player_height))
 
         # Draw player image
         screen.blit(scaled_image, (self.x, self.y))
-
 
         self.text = self.font.render(str(self.speed), True, (255, 255, 255))
         self.text_rect = self.text.get_rect(center=(self.x + 25, self.y - 50))
